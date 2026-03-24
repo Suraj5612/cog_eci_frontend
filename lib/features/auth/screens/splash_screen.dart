@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/services/storage_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -45,11 +46,21 @@ class _SplashScreenState extends State<SplashScreen>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
+    _checkAuth();
+  }
 
-    // Navigate after delay
-    Timer(const Duration(seconds: 3), () {
+  Future<void> _checkAuth() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    final token = await StorageService.getToken();
+
+    if (!mounted) return;
+
+    if (token != null) {
+      context.go('/home');
+    } else {
       context.go('/login');
-    });
+    }
   }
 
   @override
