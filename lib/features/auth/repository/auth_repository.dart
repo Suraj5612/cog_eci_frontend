@@ -19,4 +19,14 @@ class AuthRepository {
 
     return UserModel.fromJson(response['data']);
   }
+
+  Future<int> getVoterCount() async {
+    try {
+      final res = await ApiBaseHelper.get("/voters/count");
+
+      return (res['data']?['total'] ?? 0) as int;
+    } catch (e) {
+      throw Exception("Failed to fetch count");
+    }
+  }
 }

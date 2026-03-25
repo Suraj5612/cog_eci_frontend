@@ -24,8 +24,9 @@ class AuthError extends AuthState {
 
 class AuthUserLoaded extends AuthState {
   final UserModel user;
+  final int count;
 
-  AuthUserLoaded(this.user);
+  AuthUserLoaded(this.user, this.count);
 
   @override
   List<Object?> get props => [user];

@@ -54,12 +54,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     FetchProfile event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoading());
-
     try {
+      emit(AuthLoading());
       final UserModel user = await repository.getProfile();
+      final response = await repository.getVoterCount();
 
-      emit(AuthUserLoaded(user));
+      emit(AuthUserLoaded(user, response));
     } catch (e) {
       emit(AuthError(e.toString()));
     }
