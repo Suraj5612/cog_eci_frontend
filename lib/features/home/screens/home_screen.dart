@@ -3,6 +3,7 @@ import 'package:cog_eci_frontend/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/services/csv_service.dart';
@@ -169,8 +170,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             icon: Icons.camera_enhance,
                             label: "Camera",
                             onTap: () async {
-                              final image =
-                                  await ImagePickerService.pickFromCamera();
+                              final image = await ImagePicker().pickImage(
+                                source: ImageSource.camera,
+                                imageQuality: 100,
+                              );
 
                               if (image != null && context.mounted) {
                                 context.push('/preview', extra: image.path);
