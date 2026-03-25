@@ -10,8 +10,6 @@ import 'package:image_cropper/image_cropper.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/widgets/app_loader.dart';
-import '../services/image_processing_service.dart';
-import '../services/ocr_Service.dart';
 
 class ImagePreviewScreen extends StatefulWidget {
   final String imagePath;
@@ -40,7 +38,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
           toolbarTitle: 'Crop Image',
           toolbarColor: Colors.black,
           toolbarWidgetColor: Colors.white,
-          lockAspectRatio: false, // 🔥 IMPORTANT
+          lockAspectRatio: false,
           initAspectRatio: CropAspectRatioPreset.original,
           hideBottomControls: false,
           cropFrameStrokeWidth: 2,
@@ -57,36 +55,6 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
 
   void _retake() {
     Navigator.pop(context);
-  }
-
-  void _processOCR() async {
-    if (imageFile == null) return;
-
-    setState(() => isLoading = true);
-
-    // 🔥 Let UI update FIRST
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    try {
-      final enhancedFile = await ImageProcessingService.enhanceImage(
-        imageFile!,
-      );
-
-      final text = await OCRService.extractText(enhancedFile);
-
-      if (context.mounted) {
-        context.push(
-          '/voter-details',
-          extra: {'imagePath': enhancedFile.path, 'ocrText': text},
-        );
-      }
-    } catch (e) {
-      print("OCR Error: $e");
-    } finally {
-      if (mounted) {
-        setState(() => isLoading = false);
-      }
-    }
   }
 
   @override
